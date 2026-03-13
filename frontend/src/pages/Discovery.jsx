@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Search, MapPin, GraduationCap, Github } from 'lucide-react';
-import axios from 'axios';
+import api from '../api';
 import './Discovery.css';
 
 const Discovery = () => {
@@ -24,7 +24,7 @@ const Discovery = () => {
       if (filters.skill) params.append('skill', filters.skill);
       if (filters.experience) params.append('experience', filters.experience);
       
-      const response = await axios.get(`http://localhost:5000/api/discovery?${params.toString()}`, {
+      const response = await api.get(`/api/discovery?${params.toString()}`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {}
       });
       setUsers(response.data);

@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const db = require('./db');
 
 const authRoutes = require('./routes/auth');
@@ -20,9 +21,23 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/discovery', discoveryRoutes);
 app.use('/api/teams', teamsRoutes);
 
-app.get('/', (req, res) => {
-  res.json({ message: 'Hack Team Builder API is running' });
-});
+if (process.env.NODE_ENV === 'production') {
+  // Serve frontend static build
+  const frontendDistPath = path.join(__dirname, '../../frontend/dist');
+  app.use(express.static(frontendDistPath));
+
+  // Send index.html for any non-API route so client-side routing works.
+  app.get(/.*/, (req, res) => {
+    if (req.path.startsWith('/api/')) {
+      return res.status(404).json({ error: 'API endpoint not found' });
+    }
+    res.sendFile(path.join(frontendDistPath, 'index.html'));
+  });
+} else {
+  app.get('/', (req, res) => {
+    res.json({ message: 'Hack Team Builder API is running' });
+  });
+}
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Users, Plus, Trophy, Search, ChevronRight, X, UserPlus } from 'lucide-react';
-import axios from 'axios';
+import api from '../api';
 import './Teams.css';
 
 const Teams = () => {
@@ -26,7 +26,7 @@ const Teams = () => {
     const fetchTeams = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('http://localhost:5000/api/teams');
+            const response = await api.get('/api/teams');
             setTeams(response.data);
         } catch (err) {
             setError('Failed to load teams. Make sure the backend is running.');
@@ -47,7 +47,7 @@ const Teams = () => {
         }
         const token = localStorage.getItem('token');
         try {
-            await axios.post('http://localhost:5000/api/teams', formData, {
+            await api.post('/api/teams', formData, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setShowCreateForm(false);
@@ -66,8 +66,8 @@ const Teams = () => {
         }
         const token = localStorage.getItem('token');
         try {
-            const response = await axios.post(
-                `http://localhost:5000/api/teams/${teamId}/join`,
+            const response = await api.post(
+                `/api/teams/${teamId}/join`,
                 {},
                 { headers: { Authorization: `Bearer ${token}` } }
             );

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Mail, MapPin, GraduationCap, Briefcase, Github, Edit2, Save } from 'lucide-react';
-import axios from 'axios';
+import api from '../api';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const Dashboard = () => {
       }
 
       try {
-        const response = await axios.get('http://localhost:5000/api/profile', {
+        const response = await api.get('/api/profile', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setProfile(response.data);
@@ -55,7 +55,7 @@ const Dashboard = () => {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.put('http://localhost:5000/api/profile', payload, {
+      await api.put('/api/profile', payload, {
         headers: { Authorization: `Bearer ${token}` }
       });
       

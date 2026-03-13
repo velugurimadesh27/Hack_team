@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const Signup = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/signup', payload);
+      const response = await api.post('/api/auth/signup', payload);
       localStorage.setItem('token', response.data.token);
       navigate('/dashboard');
       window.location.reload(); 
